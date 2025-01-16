@@ -30,19 +30,19 @@ class CatsPresenter(
                 val fact = factDeferred.await()
                 val picture = pictureDeferred.await()
                 if (fact.isSuccess && picture.isSuccess) {
-                    _catsView?.populate(
-                        ICatsView.Model(
-                            fact.getOrThrow(),
-                            picture.getOrThrow()[0].url
-                        )
-                    )
+//                    _catsView?.populate(
+//                        ICatsView.Model(
+//                            fact.getOrThrow(),
+//                            picture.getOrThrow()[0].url
+//                        )
+//                    )
                 }
         }
     }
 
-    private fun CoroutineScope.onRequestFailure(it: Throwable) {
-        CrashMonitor.trackWarning()
-        _catsView?.showToast(it.message ?: "Ошибка")
+    private fun CoroutineScope.onRequestFailure(t: Throwable) {
+        CrashMonitor.trackWarning(t)
+//        _catsView?.showToast(t.message ?: "Ошибка")
         cancel()
     }
 

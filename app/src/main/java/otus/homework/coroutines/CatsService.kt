@@ -4,6 +4,6 @@ import retrofit2.http.GET
 
 interface CatsService {
 
-    @GET("fact1")
+    @GET("fact")
     suspend fun getCatFact(): Fact
 }

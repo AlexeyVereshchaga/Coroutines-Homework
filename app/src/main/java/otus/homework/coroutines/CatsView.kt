@@ -2,7 +2,6 @@ package otus.homework.coroutines
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,31 +14,33 @@ class CatsView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), ICatsView {
 
-    var presenter: CatsPresenter? = null
+//    var presenter: CatsPresenter? = null
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-        findViewById<Button>(R.id.button).setOnClickListener {
-            presenter?.onInitComplete()
+//    override fun onFinishInflate() {
+//        super.onFinishInflate()
+//        findViewById<Button>(R.id.button).setOnClickListener {
+//            presenter?.onInitComplete()
+//        }
+//    }
+
+    override fun populate(result: Result) {
+        when (result) {
+            is Result.Error -> Toast.makeText(context, result.text, Toast.LENGTH_SHORT).show()
+            is Result.Success<*> -> {
+                (result.data as? ICatsView.Model)?.let {
+                    findViewById<TextView>(R.id.fact_textView).text = it.fact.fact
+                    Picasso.get()
+                        .load(it.imageUrl)
+                        .into(findViewById<ImageView>(R.id.cat_imageView))
+                }
+
+            }
         }
-    }
-
-    override fun populate(model: ICatsView.Model) {
-        findViewById<TextView>(R.id.fact_textView).text = model.fact.fact
-        Picasso.get()
-            .load(model.imageUrl)
-            .into(findViewById<ImageView>(R.id.cat_imageView))
-    }
-
-    override fun showToast(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 }
 
 interface ICatsView {
-    fun populate(model: Model)
-
-    fun showToast(text: String)
+    fun populate(result: Result)
 
     data class Model(
         val fact: Fact,
