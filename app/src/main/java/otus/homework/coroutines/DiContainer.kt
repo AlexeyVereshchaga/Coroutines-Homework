@@ -12,5 +12,13 @@ class DiContainer {
             .build()
     }
 
+    private val retrofitPictures by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://api.thecatapi.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
     val service by lazy { retrofit.create(CatsService::class.java) }
+    val servicePictures by lazy { retrofitPictures.create(PicturesService::class.java) }
 }
